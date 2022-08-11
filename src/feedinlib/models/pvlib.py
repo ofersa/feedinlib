@@ -110,7 +110,6 @@ class Pvlib(PhotovoltaicModelBase):
             "azimuth",
             "tilt",
             "module_name",
-            ["albedo", "surface_type"],
             "inverter_name",
             "temperature_model",
         ]
