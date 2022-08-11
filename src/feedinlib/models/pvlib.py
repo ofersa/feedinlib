@@ -112,6 +112,7 @@ class Pvlib(PhotovoltaicModelBase):
             "module_name",
             ["albedo", "surface_type"],
             "inverter_name",
+            "temperature_model",
         ]
         # ToDo @Günni: is this necessary?
         if super().power_plant_requires is not None:
@@ -146,9 +147,9 @@ class Pvlib(PhotovoltaicModelBase):
         """
         if self.power_plant:
             return (
-                self.power_plant.module_parameters.Area
-                * self.power_plant.strings_per_inverter
-                * self.power_plant.modules_per_string
+                self.power_plant.arrays[0].module_parameters.Area
+                * self.power_plant.arrays[0].strings
+                * self.power_plant.arrays[0].modules_per_string
             )
         else:
             return None
@@ -247,6 +248,9 @@ class Pvlib(PhotovoltaicModelBase):
             "inverter_parameters": get_power_plant_data("CECInverter")[
                 kwargs.pop("inverter_name")
             ],
+            "temperature_model_parameters": get_power_plant_data("sapm")[
+                kwargs.pop("temperature_model")
+            ],
             "surface_azimuth": kwargs.pop("azimuth"),
             "surface_tilt": kwargs.pop("tilt"),
         }
@@ -315,7 +319,7 @@ class Pvlib(PhotovoltaicModelBase):
         mc.run_model(weather=weather)
 
         if self.mode == "ac":
-            return mc.ac
+            return mc.results.ac
         elif self.mode == "dc":
             return mc.dc.p_mp
         else:

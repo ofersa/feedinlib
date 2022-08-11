@@ -246,6 +246,8 @@ def get_power_plant_data(dataset, **kwargs):
         return pvlib.pvsystem.retrieve_sam(
             name=dataset, path=kwargs.get("path", None)
         )
+    elif dataset in ["sapm"]:
+        return pvlib.temperature.TEMPERATURE_MODEL_PARAMETERS["sapm"]
     elif dataset == "oedb_turbine_library":
         return get_turbine_types(
             turbine_library=kwargs.get("turbine_library", "local"),
